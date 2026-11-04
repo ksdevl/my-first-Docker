@@ -453,24 +453,46 @@ ls -l test.txt
 
 ### 4-6. 디렉토리 권한 변경
 
-실행 명령어:
+실행 명령어: 실습 환경 확인
 ```
-mkdir permission-test
+cd ~
+pwd
+df -T .
+```
 
+실행 결과: WSL의 Linux 전용 파일시스템인 ext4 환경에서 실습 진행
+```
+/home/genik
+Filesystem     Type  1K-blocks    Used  Available Use% Mounted on
+/dev/sdd       ext4 1055762868 1353440 1000705956   1% /
+```
+
+실행 명령어: 디렉터리 생성 및 초기 권한 확인
+```
+mkdir -p permission-test
 ls -ld permission-test
+```
 
+실행 명령어: 권한을 755로 변경
+```
 chmod 755 permission-test
 ls -ld permission-test
+```
 
+실행 결과: 
+```
+drwxr-xr-x 2 genik genik 4096 Nov  5 04:15 permission-test
+```
+
+실행 명령어: 권한을 700으로 변경
+```
 chmod 700 permission-test
 ls -ld permission-test
 ```
 
 실행 결과
 ```
-rwxrwxrwx 1 genik genik 512 Nov  5 02:52 permission-test
-drwxrwxrwx 1 genik genik 512 Nov  5 02:52 permission-test
-drwxrwxrwx 1 genik genik 512 Nov  5 02:52 permission-test
+drwx------ 2 genik genik 4096 Nov  5 04:15 permission-test
 ```
 
 ```
@@ -997,17 +1019,12 @@ Mode                 LastWriteTime         Length Name
 
 실행 명령어:
 ```
-New-Item docker/Dockerfile -ItemType File
+New-Item Dockerfile -ItemType File
 ```
 
 실행 결과
 ```
- 디렉터리: C:\Users\K'\my-first-docker\docker
-
-
-Mode                 LastWriteTime         Length Name                                 
-----                 -------------         ------ ----                                 
--a----      2026-11-03   오후 3:43              0 Dockerfile 
+ 디렉터리: C:\Users\K'\my-first-docker
 ```
 
 실행 명령어:
@@ -1481,6 +1498,19 @@ Docker 실행 증거   images/
 프로젝트 구조       images/
 ```
 
+### 10-4. 체크리스트
+```
+- [x] 터미널 기본 명령어 실습
+- [x] 파일 및 디렉터리 권한 변경
+- [x] Docker 설치 및 기본 명령어
+- [x] Dockerfile 이미지 빌드
+- [x] 포트 매핑 및 웹 서버 접속
+- [x] 바인드 마운트
+- [x] Docker Volume 영속성 검증
+- [x] Git 및 GitHub 연동
+- [x] 트러블슈팅
+```
+
 ## 11. Troubleshooting 
 
 ### 11-1. Github에 업로드
@@ -1700,11 +1730,12 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 ```
 추가설명
-명령어	          검증 목적
+
+명령어	           검증 목적
 docker ps -a	   생성된 컨테이너와 실행 상태 확인
 docker images	   생성된 Docker 이미지 확인
 docker volume ls  생성된 Docker 볼륨 확인
-git status	       로컬 저장소의 변경사항 및 원격 동기화 상태 확인
+git status	      로컬 저장소의 변경사항 및 원격 동기화 상태 확인
 ```
 
 ### 12-2. 최종 변경사항 Github업로드
