@@ -1129,6 +1129,14 @@ git commit -m "Update mission documentation"
 git push
 ```
 
+## 10. 최종 Reame 및 증거자료 정리
+
+### 10-1. 최종 폴더 구조
+
+실행 결과
+```
+![alt text](image.png)
+```
 
 
 
