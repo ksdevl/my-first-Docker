@@ -922,6 +922,20 @@ source=$($PWD.Path)\app,target=/usr/share/nginx/html,readonly" nginx:latest
 
 ### 7-3. HTML 파일 수정
 
+실행 명령어: Windows의 app/index.html 파일 수정 
+```
+<h1>Hello, Bind Mount!</h1>
+```
+
+실행 결과: 브라우저에서 수정 내용 반영 확인
+
+기존
+![Hello, Docker!](./images/웹%20서버%20컨테이너(8080)_최초.PNG)
+
+변경 후
+![Hello, Bind Mount!](./images/웹%20서버%20컨테이너(8080).PNG)
+
+
 ## 8. Docker 볼륨을 이용한 데이터 영속성 실습
 
 ### 8-1. 볼륨 생성
@@ -1129,13 +1143,33 @@ git commit -m "Update mission documentation"
 git push
 ```
 
-## 10. 최종 Reame 및 증거자료 정리
+## 10. 최종 Readme 및 증거자료 정리
 
 ### 10-1. 최종 폴더 구조
+
+실행 명령어: 폴더구조 이미지를 저장하기 위한 디렉토리 생성
+```
+mkdir images
+```
+
+실행 결과: 
+```
+Mode                 LastWriteTime         Length Name                                  
+----                 -------------         ------ ----                                  
+d-----      2026-11-04   오후 1:52                images  
+```
 
 실행 결과
 
 ![프로젝트 폴더 구조](images/폴더구조.PNG)
+
+### 10-2. Readme에 스크린샷 연결
+
+1. Docker 실행
+![Docker Hello World](./images/Docker%20실행%20결과.PNG)
+
+2. 웹 서버 실행
+![Hello, Bind Mount!](./images/웹%20서버%20컨테이너(8080).PNG)
 
 
 
@@ -1236,3 +1270,56 @@ To https://github.com/ksdevl/my-first-Docker.git
    51a4285..898e245  main -> main
 branch 'main' set up to track 'origin/main'.
 ```
+
+### 2. 최종 폴더 구조
+
+실행 명령어: 
+```
+"```"
+![프로젝트 폴더 구조](images/폴더구조.PNG)
+"```"
+```
+
+실행 결과: 
+```
+Readme 미리보기 및 Github 업로드시 이미지가 보이지 않음.
+```
+
+실행 명령어: 미리보기로 이미지가 뜨는지 확인
+```
+Ctrl + Shift + V
+```
+
+실행 결과: 
+```
+미리보기로 이미지가 보이지 않음
+```
+
+실행 명령어: 이미지 파일이 실제로 존재하는지 확인
+```
+Test-Path ".\images\폴더구조.png"
+```
+
+실행 결과: 이미지가 존재함 
+```
+True
+```
+
+실행 명령어: VS code에서 직접 이미지 오픈
+```
+code --reuse-window .\images\폴더구조.PNG
+```
+
+실행 결과: 이미지가 존재함 
+```
+이미지가 정상적으로 뜸
+```
+
+실행 명령어: `(백틱)이 존재해서 발생한 문제로, 백틱을 제거해서 해결
+```
+![프로젝트 폴더 구조](images/폴더구조.PNG)
+```
+
+실행 결과
+
+![프로젝트 폴더 구조](images/폴더구조.PNG)
