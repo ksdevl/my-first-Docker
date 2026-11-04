@@ -98,13 +98,23 @@ git version 2.56.0.windows.4
 ### 2-4. Docker 버전 확인
 
 실행 명령어:
-```powershell
+```
 docker --version
 ```
 
 실행 결과
 ```
 Docker version 29.9.2, build a82e528
+```
+
+실행 명령어:
+```
+docker desktop version
+```
+
+실행 결과
+```
+Docker Desktop CLI plugin version: 4.97.0
 ```
 
 ### 2-5. Docker 클라이언트 및 서버 확인
@@ -223,6 +233,14 @@ Server:
  Firewall Backend: iptables
 ```
 
+```
+추가 설명
+- Docker Client: 사용자 명령어를 입력하는 클라이언트
+- Docker Server: 실제 컨테이너와 이미지를 관리하는 Docker 엔진
+- Context: desktop-linux 환경을 통해 Docker Desktop의 Linux 엔진에 연결
+- Operating System: Docker Desktop의 Linux 기반 실행 환경
+```
+
 ## 3. 폴더/파일 생성 및 이동 등
 
 ### 3-1. 폴더 생성 및 확인
@@ -251,6 +269,32 @@ d-----      2026-11-02   오후 2:55                screenshots
 -a----      2026-11-02   오후 3:30           6405 README.md 
 ```
 
+실행 명령어:
+```
+Get-ChildItem -Force
+```
+
+실행 결과
+```
+Mode                 LastWriteTime         Length Name                                  
+----                 -------------         ------ ----                                  
+d--h--      2026-11-04   오후 5:19                .git                                  
+d-----      2026-11-03   오후 3:36                app                                   
+d-----      2026-11-03   오후 3:32                dev-workstation-mission               
+d-----      2026-11-03   오후 3:43                docker                                
+d-----      2026-11-02   오후 2:55                docker-data                           
+d-----      2026-11-04   오후 5:10                images                                
+d-----      2026-11-02   오후 3:33                logs                                  
+d-----      2026-11-02   오후 2:55                practice                              
+d-----      2026-11-02   오후 2:55                screenshots                           
+d-----      2026-11-02   오후 3:46                test-folder                           
+-a----      2026-11-04   오후 1:02             96 .gitignore                            
+-a----      2026-11-03   오후 3:48             86 Dockerfile                            
+-a----      2026-11-04   오후 1:46          11690 image.png                             
+-a----      2026-11-02   오후 3:55             18 practice.txt                          
+-a----      2026-11-05   오전 2:32          43573 README.md        
+```
+
 ### 3-2. test폴더 생성 및 이동
 
 실행 명령어:
@@ -276,6 +320,16 @@ Provider     : Microsoft.PowerShell.Core\FileSystem
 ProviderPath : C:\Users\K'\my-first-docker\test-folder
 Path         : C:\Users\K'\my-first-docker\test-folder
 ```
+
+```
+추가설명
+- 절대 경로: 드라이브 또는 루트부터 시작하는 전체 경로
+  예: C:\Users\K'\my-first-docker\app
+
+- 상대 경로: 현재 작업 위치를 기준으로 표현하는 경로
+  예: .\app\index.html
+```
+
 
 ### 3-3. 파일 생성 및 내용 입력
 
@@ -397,7 +451,49 @@ ls -l test.txt
 -rwx------ 1 ooooo ooooo 0 Nov  3 13:01 test.txt
 ```
 
-### 4-6. Ubuntu 실행 종료
+### 4-6. 디렉토리 권한 변경
+
+실행 명령어:
+```
+mkdir permission-test
+
+ls -ld permission-test
+
+chmod 755 permission-test
+ls -ld permission-test
+
+chmod 700 permission-test
+ls -ld permission-test
+```
+
+실행 결과
+```
+rwxrwxrwx 1 genik genik 512 Nov  5 02:52 permission-test
+drwxrwxrwx 1 genik genik 512 Nov  5 02:52 permission-test
+drwxrwxrwx 1 genik genik 512 Nov  5 02:52 permission-test
+```
+
+```
+추가설명
+권한	숫자	의미
+r	4	읽기
+w	2	쓰기
+x	1	실행
+
+755 = 7(4+2+1) / 5(4+1) / 5(4+1)
+
+- 소유자: 읽기, 쓰기, 실행
+- 그룹: 읽기, 실행
+- 기타 사용자: 읽기, 실행
+
+644 = 6(4+2) / 4 / 4
+
+- 소유자: 읽기, 쓰기
+- 그룹: 읽기
+- 기타 사용자: 읽기
+```
+
+### 4-7. Ubuntu 실행 종료
 
 실행 명령어:
 ```
@@ -584,7 +680,129 @@ Digest: sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c
 Status: Downloaded newer image for ubuntu:latest
 ```
 
-### 5-4. 컨테이너 상태 확인
+### 5-4. 내부 명령어 실행
+
+실행 명령어: 현재 위치 확인
+```
+pwd
+```
+
+실행 명령어: 파일 및 디렉토리 목록
+```
+ls -la
+```
+
+실행 결과
+```
+drwxr-xr-x   1 root root 4096 Nov  4 17:19 .
+drwxr-xr-x   1 root root 4096 Nov  4 17:19 ..
+-rwxr-xr-x   1 root root    0 Nov  4 17:19 .dockerenv
+drwxr-xr-x   2 root root 4096 Oct 25 10:26 .rock
+lrwxrwxrwx   1 root root    7 Apr 20  2026 bin -> usr/bin
+drwxr-xr-x   2 root root 4096 Apr 20  2026 boot
+drwxr-xr-x   5 root root  360 Nov  4 17:19 dev
+drwxr-xr-x   1 root root 4096 Nov  4 17:19 etc
+drwxr-xr-x   3 root root 4096 Oct 25 10:26 home
+lrwxrwxrwx   1 root root    7 Apr 20  2026 lib -> usr/lib
+lrwxrwxrwx   1 root root    9 Apr 20  2026 lib64 -> usr/lib64
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 media
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 mnt
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 opt
+dr-xr-xr-x 211 root root    0 Nov  4 17:19 proc
+drwx------   2 root root 4096 Oct 25 10:26 root
+drwxr-xr-x   4 root root 4096 Oct 25 10:26 run
+lrwxrwxrwx   1 root root    8 Apr 20  2026 sbin -> usr/sbin
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 srv
+dr-xr-xr-x  12 root root    0 Nov  4 17:19 sys
+drwxrwxrwt   2 root root 4096 Oct 25 10:25 tmp
+drwxr-xr-x  12 root root 4096 Oct 25 10:24 usr
+drwxr-xr-x  11 root root 4096 Oct 25 10:26 var
+```
+
+실행 명령어: 메시지 출력
+```
+echo "Hello Docker Ubuntu"
+```
+
+실행 결과
+```
+Hello Docker Ubuntu
+```
+
+실행 명령어: 파일 생성
+```
+touch test.txt
+```
+
+실행 명령어: 파일 내용 작성
+```
+echo "Ubuntu Container Test" > test.txt
+```
+
+실행 명령어: 파일 내용 확인
+```
+cat test.txt
+```
+
+실행 결과
+```
+Ubuntu Container Test
+```
+
+실행 명령어: 파일 확인
+```
+cat test.txt
+```
+
+실행 결과
+```
+-rw-r--r-- 1 root root 22 Nov  4 17:23 test.txt
+```
+
+### 5-5. 컨테이너 종료 및 유지 방식 이해
+
+실행 명령어:
+```
+exit
+```
+
+실행 명령어: 컨테이너 상태 확인
+```
+docker ps -a
+```
+
+실행 결과
+```
+CONTAINER ID   IMAGE                COMMAND                   CREATED         STATUS                        PORTS                  NAMES
+a39bc771f2c1   ubuntu:latest        "bash"                    9 minutes ago   Exited (0) 21 seconds ago  
+```
+
+실행 명령어: 컨테이너 재 실행
+```
+docker start mission-ubuntu
+```
+
+실행 결과
+```
+mission-ubuntu
+```
+
+실행 명령어: 컨테이너 내부로 진입
+```
+docker exec -it mission-ubuntu bash
+```
+
+실행 명령어: 이전 작성 파일 존재 여부 확인
+```
+cat test.txt
+```
+
+실행 결과
+```
+Ubuntu Container Test
+```
+
+### 5-6. 컨테이너 상태 확인
 
 실행 명령어:
 ```
@@ -605,26 +823,61 @@ hello-world:latest   c567b231f656       25.9kB         9.49kB    U
 ubuntu:latest        6a06111c3b0a        163MB         45.9MB    U   
 ```
 
-### 5-5. 컨테이너 로그 및 관리
+### 5-7. 컨테이너 로그 및 관리
 
 실행 명령어:
 ```
-ddocker logs mission-ubuntu
 docker start mission-ubuntu
+docker logs mission-ubuntu
 docker stop mission-ubuntu
 docker rm mission-ubuntu
 ```
 
 실행 결과
 ```
-root@8325a9987829:/# exit
-exit
 mission-ubuntu
+root@a39bc771f2c1:/# pwd
+/
+root@a39bc771f2c1:/# ls -la
+total 60
+drwxr-xr-x   1 root root 4096 Nov  4 17:19 .
+drwxr-xr-x   1 root root 4096 Nov  4 17:19 ..
+-rwxr-xr-x   1 root root    0 Nov  4 17:19 .dockerenv
+drwxr-xr-x   2 root root 4096 Oct 25 10:26 .rock
+lrwxrwxrwx   1 root root    7 Apr 20  2026 bin -> usr/bin
+drwxr-xr-x   2 root root 4096 Apr 20  2026 boot
+drwxr-xr-x   5 root root  360 Nov  4 17:19 dev
+drwxr-xr-x   1 root root 4096 Nov  4 17:19 etc
+drwxr-xr-x   3 root root 4096 Oct 25 10:26 home
+lrwxrwxrwx   1 root root    7 Apr 20  2026 lib -> usr/lib
+lrwxrwxrwx   1 root root    9 Apr 20  2026 lib64 -> usr/lib64
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 media
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 mnt
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 opt
+dr-xr-xr-x 211 root root    0 Nov  4 17:19 proc
+drwx------   2 root root 4096 Oct 25 10:26 root
+drwxr-xr-x   4 root root 4096 Oct 25 10:26 run
+lrwxrwxrwx   1 root root    8 Apr 20  2026 sbin -> usr/sbin
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 srv
+dr-xr-xr-x  12 root root    0 Nov  4 17:19 sys
+drwxrwxrwt   2 root root 4096 Oct 25 10:25 tmp
+drwxr-xr-x  12 root root 4096 Oct 25 10:24 usr
+drwxr-xr-x  11 root root 4096 Oct 25 10:26 var
+root@a39bc771f2c1:/# echo "Hello Docker Ubuntu"
+Hello Docker Ubuntu
+root@a39bc771f2c1:/# touch test.txt
+root@a39bc771f2c1:/# echo "Ubuntu Container Test" > test.txt
+root@a39bc771f2c1:/# cat test.txt
+Ubuntu Container Test
+root@a39bc771f2c1:/# ls -l test.txt
+-rw-r--r-- 1 root root 22 Nov  4 17:23 test.txt
+root@a39bc771f2c1:/# exit
+exit
 mission-ubuntu
 mission-ubuntu
 ```
 
-### 5-6. attach와 exec 차이 확인
+### 5-8. attach와 exec 차이 확인
 
 실행 명령어:
 ```
@@ -666,67 +919,42 @@ mission-test
 mission-test
 ```
 
-### 5-7. 기타 Docker 관리 명령어
+```
+추가설명
+- docker exec: 실행 중인 컨테이너에 새로운 프로세스를 실행하여 접속.
+- docker attach: 컨테이너의 기존 주 프로세스에 연결.
+
+exec는 별도의 셸을 실행하는 방식이며,
+attach는 기존 프로세스의 입출력에 연결하는 방식.
+```
+
+### 5-9. 기타 Docker 관리 명령어
 
 실행 명령어:
 ```
+docker run -d --name stats-test nginx:latest
 docker stats --no-stream
-docker inspect hello-world
-docker system df
+docker stop stats-test
+docker rm stats-test
 ```
 
 실행 결과
 ```
-[
-    {
-        "Id": "sha256:c567b231f65614688711a75f31518a064258a51d442117a3e771a3a8fdba78ef",        "RepoTags": [
-            "hello-world:latest"
-        ],
-        "RepoDigests": [
-            "hello-world@sha256:c567b231f65614688711a75f31518a064258a51d442117a3e771a3a8fdba78ef"
-        ],
-        "Comment": "buildkit.dockerfile.v0",
-        "Created": "2026-03-23T21:33:59.562202219Z",
-        "Config": {
-            "Env": [
-                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-            ],
-            "Cmd": [
-                "/hello"
-            ],
-            "WorkingDir": "/"
-        },
-        "Architecture": "amd64",
-        "Os": "linux",
-        "Size": 20399,
-        "RootFS": {
-            "Type": "layers",
-            "Layers": [
-                "sha256:897b3f2a7c1bc2f3d02432f7892fe31c6272c521ad4d70257df624504a3238b4"
-            ]
-        },
-        "Metadata": {
-            "LastTagTime": "2026-11-03T04:21:10.749236658Z"
-        },
-        "Descriptor": {
-            "mediaType": "application/vnd.oci.image.index.v1+json",
-            "digest": "sha256:c567b231f65614688711a75f31518a064258a51d442117a3e771a3a8fdba78ef",
-            "size": 11062
-        },
-        "Identity": {
-            "Pull": [
-                {
-                    "Repository": "docker.io/library/hello-world"
-                }
-            ]
-        }
-    }
-]
-TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
-Images          2         1         162.7MB   162.7MB (99%)
-Containers      2         0         8.192kB   8.192kB (100%)
-Local Volumes   0         0         0B        0B
-Build Cache     0         0         0B        0B
+2a4dda1fb87b4c862ca02f37621be3e0cefd079a24ce91457064c30c0f9a2dfe
+CONTAINER ID   NAME         CPU %     MEM USAGE / LIMIT     MEM %     NET I/O      BLOCK I/O         PIDS
+2a4dda1fb87b   stats-test   0.00%     15.95MiB / 3.755GiB   0.41%     690B / 84B   17.5MB / 8.19kB   13
+stats-test
+stats-test
+```
+
+### 5-10. 이미지와 컨테이너의 차이
+
+```
+- Docker 이미지: 컨테이너를 생성하기 위한 실행 템플릿
+- Docker 컨테이너: 이미지를 기반으로 생성되어 실행되는 독립적인 환경
+
+- 이미지는 빌드하여 생성하고, 컨테이너는 이미지를 실행하여 생성한다.
+- 컨테이너 내부에서 변경한 내용은 기본적으로 해당 컨테이너의 쓰기 가능 계층에 저장되며, 컨테이너 삭제 시 함께 사라질 수 있음
 ```
 
 ## 6. Dockerfile 작성 및 커스텀 웹 서버 구축
@@ -810,49 +1038,51 @@ EXPOSE 80
 확장자: 없음
 ```
 
+```
+추가설명
+- FROM: 기존 NGINX 이미지를 베이스 이미지로 지정
+- COPY: 호스트의 HTML 파일을 컨테이너 내부 웹 서버 경로에 복사
+- EXPOSE: 컨테이너가 서비스에 사용할 포트 80을 문서화 함
+```
+
 ### 6-3. Docker image build
 
 실행 명령어:
 ```
-docker build -t my-webserver:v1 -f Dockerfile .
+docker build -t my-webserver:v1 -f .\Dockerfile .
 ```
 
 실행 결과
 ```
-[+] Building 16.3s (7/7) FINISHED                                  docker:desktop-linux
- => [internal] load build definition from Dockerfile                               0.0s
- => => transferring dockerfile: 123B                                               0.0s
- => [internal] load metadata for docker.io/library/nginx:latest                    2.7s
- => [internal] load .dockerignore                                                  0.1s
- => => transferring context: 2B                                                    0.0s
- => [internal] load build context                                                  0.3s
- => => transferring context: 330B                                                  0.0s
- => [1/2] FROM docker.io/library/nginx:latest@sha256:5ab5b0b01097420873a3f3330f44  8.6s
- => => resolve docker.io/library/nginx:latest@sha256:5ab5b0b01097420873a3f3330f44  0.1s
- => => sha256:a670537bed7086aeb8b663aad5e09cd584e19c6598cd2b6d905 1.40kB / 1.40kB  0.2s
- => => sha256:d322f1bf41d8e99dc47f550cbf85e79ca18bc45db12fd1b7a8b 1.21kB / 1.21kB  0.4s
- => => sha256:c139fe92686de21a8c49d9cb40415d1dddd95fbbee4d696cebe37693 0B / 404B  12.5s
- => => sha256:6e2ab1f3ef4e0ea3bbe1d208dfa048969199e3dab99e93c051b7c2d 964B / 964B  0.6s
- => => sha256:9f604dae09b216f6c87919d0e59d5a4ddc4387ef071cf63c645628f 628B / 628B  0.5s
- => => sha256:a071113ac575190a0fee0c046bcf51632356f07419bdffaa5 34.05MB / 34.05MB  2.8s
- => => sha256:6fc242d221a673263eabd14a9ad9584d3177c96e5cb504c89 29.86MB / 29.86MB  4.7s
- => => extracting sha256:6fc242d221a673263eabd14a9ad9584d3177c96e5cb504c891497338  1.0s
- => => extracting sha256:a071113ac575190a0fee0c046bcf51632356f07419bdffaa55798f54  0.8s
- => => extracting sha256:9f604dae09b216f6c87919d0e59d5a4ddc4387ef071cf63c645628f9  0.1s
- => => extracting sha256:6e2ab1f3ef4e0ea3bbe1d208dfa048969199e3dab99e93c051b7c2d0  0.1s
- => => extracting sha256:c139fe92686de21a8c49d9cb40415d1dddd95fbbee4d696cebe37693  0.1s
- => => extracting sha256:d322f1bf41d8e99dc47f550cbf85e79ca18bc45db12fd1b7a8b34bf7  0.1s
- => => extracting sha256:a670537bed7086aeb8b663aad5e09cd584e19c6598cd2b6d905c5f2f  0.1s
- => [2/2] COPY app/index.html /usr/share/nginx/html/index.html                     1.4s
- => exporting to image                                                             3.0s
- => => exporting layers                                                            0.4s
- => => exporting manifest sha256:9f2d3f5e2e7bf8dd6e79fa7ba34f7629c0985b3e0e3951d4  0.1s
- => => exporting config sha256:3258d7fc842b9aa46f094fcf345e9597c24db45413041303ac  0.1s
- => => exporting attestation manifest sha256:fd84825df51d004f72e31dd9b92312e17370  0.1s
- => => exporting manifest list sha256:114810bad59463c275cf3992078df7e7a7ada03a160  0.1s
- => => naming to docker.io/library/my-webserver:v1                                 0.0s
+[+] Building 2.2s (7/7) FINISHED                                    docker:desktop-linux
+ => [internal] load build definition from Dockerfile                                0.1s
+ => => transferring dockerfile: 123B                                                0.0s
+ => [internal] load metadata for docker.io/library/nginx:latest                     0.2s
+ => [internal] load .dockerignore                                                   0.1s
+ => => transferring context: 2B                                                     0.0s
+ => [internal] load build context                                                   0.1s
+ => => transferring context: 334B                                                   0.0s
+ => CACHED [1/2] FROM docker.io/library/nginx:latest@sha256:5ab5b0b01097420873a3f3  0.1s
+ => => resolve docker.io/library/nginx:latest@sha256:5ab5b0b01097420873a3f3330f442  0.1s
+ => [2/2] COPY app/index.html /usr/share/nginx/html/index.html                      0.2s
+ => exporting to image                                                              1.1s
+ => => exporting layers                                                             0.4s
+ => => exporting manifest sha256:a157b6353416cbecae6cb0f49c2aed06426efe40395f428b0  0.1s
+ => => exporting config sha256:6e6016be68ecbf87b9df8adc4644d041576c38f7136a14f3425  0.1s
+ => => exporting attestation manifest sha256:9910344a4445ba3f2487ce006063acabbb6b1  0.1s
+ => => exporting manifest list sha256:f438ee662f7fba7224a9f70f386fe091d19d644e67fa  0.1s
+ => => naming to docker.io/library/my-webserver:v1                                  0.0s
  => => unpacking to docker.io/library/my-webserver:v1         
  ```
+
+```
+추가설명
+기존 베이스 이미지: nginx:latest
+
+커스텀 이미지: my-webserver:v1
+
+기존 NGINX 이미지에 직접 작성한 index.html을 추가하여 커스텀 이미지를 제작하였음.
+```
 
  ### 6-4. 웹 서버 컨테이너 실행
 
@@ -920,6 +1150,13 @@ source=$($PWD.Path)\app,target=/usr/share/nginx/html,readonly" nginx:latest
 093155c2852451300fd269540307f774ecf5fff45893da5cb9e9a8e9df4b93ca
 ```
 
+```
+추가설명
+- source: Windows 호스트의 app 디렉토리
+- target: 컨테이너 내부의 웹 서버 콘텐츠 디렉토리
+- readonly: 컨테이너에서 호스트 파일을 수정하지 못하도록 읽기 전용 설정
+```
+
 ### 7-3. HTML 파일 수정
 
 실행 명령어: Windows의 app/index.html 파일 수정 
@@ -935,6 +1172,12 @@ source=$($PWD.Path)\app,target=/usr/share/nginx/html,readonly" nginx:latest
 변경 후<br>
 ![Hello, Bind Mount!](./images/웹%20서버%20컨테이너(8080).PNG)
 
+```
+추가설명
+- 바인드 마운트는 호스트의 특정 파일 또는 디렉토리를 컨테이너 내부 경로에 연결하는 방식이므로, 호스트에서 HTML 파일을 변경하면 이미지를 다시 빌드하거나 컨테이너를 재생성하지 않아도 변경 내용이 컨테이너에 반영됨.
+
+단, readonly 설정이므로 변경 작업은 호스트에서 수행해야 함.
+```
 
 ## 8. Docker 볼륨을 이용한 데이터 영속성 실습
 
@@ -1004,6 +1247,18 @@ docker run --rm -v mission-data:/data alpine cat /data/test.txt
 Docker Volume Persistence Test
 ```
 
+```
+추가설명
+- Docker Volume은 컨테이너를 독립적으로 데이터를 보존할 수 있는 저장 공간임. 컨테이너 내부의 일반 파일시스템에 데이터를 저장하면 컨테이너 삭제 시 데이터도 사라질 수 있지만, Docker Volume을 연결하면 데이터가 컨테이너 외부의 Docker 관리 저장 공간에 보존되므로 컨테이너를 삭제하더라도 새로운 컨테이너에서 기존 데이터를 다시 사용할 수 있음.
+
+구분	               바인드 마운트	            Docker Volume
+저장 위치	       호스트에서 지정한 경로   	Docker가 관리하는 저장 공간
+주요 목적	       소스코드 및 파일 공유	    데이터 영속성
+호스트 경로 지정	   필요	                    불필요
+데이터 유지	       호스트 파일 유지	        컨테이너 삭제 후에도 유지
+대표 활용	       웹 개발 및 파일 변경 반영	DB 및 서비스 데이터 보존
+```
+
 ## 9. Git 및 Github 연동
 
 ### 9-1. Git 사용자 정보 확인
@@ -1012,6 +1267,27 @@ Docker Volume Persistence Test
 ```
 git config --global user.name "ksdevl"
 git config --global user.email "cela2323@google.com"
+```
+
+실행 명령어: 
+```
+git config --global init.defaultBranch main
+git config --list
+git branch --show-current
+```
+
+실행 결과
+```
+diff.astextplain.textconv=astextplain
+filter.lfs.clean=git-lfs clean -- %f
+filter.lfs.smudge=git-lfs smudge -- %f
+filter.lfs.process=git-lfs filter-process
+filter.lfs.required=true
+http.sslbackend=schannel
+core.autocrlf=true
+core.fscache=true
+core.symlinks=false
+pull.rebase=false
 ```
 
 ### 9-2. Gitignore 작성
@@ -1143,6 +1419,20 @@ git commit -m "Update mission documentation"
 git push
 ```
 
+### 9-8. VSCode와 GitHub 연동 확인
+
+```
+1. VSCode 실행
+2. 좌측 계정 메뉴에서 GitHub 로그인
+3. 프로젝트 폴더 열기
+4. Source Control에서 Git 저장소 확인
+5. 원격 저장소 연결 상태 확인
+6. GitHub 저장소와 프로젝트 파일이 동기화되는지 확인
+```
+
+![깃허브와 VScode 연동](./images/깃허브와%20vscode%20연동.PNG)
+![Source control 변경 파일 표시](./images/source%20control.PNG)
+
 ## 10. 최종 Readme 및 증거자료 정리
 
 ### 10-1. 최종 폴더 구조
@@ -1177,6 +1467,19 @@ d-----      2026-11-04   오후 1:52                images
 4. 볼륨 데이터 영속성<br>
 ![Docker Volume Persistence Test](./images/데이터%20영속성.PNG)
 
+### 10-3. 최종 결과물 및 검증 증거 위치
+```
+검증 항목	      결과물 위치
+프로젝트 설명	      README.md
+웹 서버 소스코드	  app/index.html
+Dockerfile	      Dockerfile
+터미널 실습 기록	  logs/
+Docker 실행 증거   images/
+웹 서버 접속 증거	  images/
+바인드 마운트 증거	  images/
+볼륨 영속성 증거	  images/
+프로젝트 구조       images/
+```
 
 ## 11. Troubleshooting 
 
@@ -1197,6 +1500,12 @@ hint: have locally. This is usually caused by another repository pushing to
 hint: the same ref. If you want to integrate the remote changes, use
 hint: 'git pull' before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+```
+
+```
+원인 가설
+- 로컬 저장소에 이미 origin이라는 원격 저장소가 등록되어 있음.
+- 로컬 저장소와 GitHub 원격 저장소의 커밋 이력이 서로 다름.
 ```
 
 실행 명령어: 저장소를 다시 세팅
@@ -1274,6 +1583,14 @@ To https://github.com/ksdevl/my-first-Docker.git
 branch 'main' set up to track 'origin/main'.
 ```
 
+```
+해결 결과
+- 로컬 README를 기준으로 병합 충돌을 해결하고 GitHub 원격 저장소에 정상적으로 업로드하였음
+
+재발 방지
+- 기존 원격 저장소의 존재 여부와 커밋 이력을 확인한 후 저장소를 연결하고 작업
+```
+
 ### 11-2. 최종 폴더 구조
 
 실행 명령어: 
@@ -1286,6 +1603,12 @@ branch 'main' set up to track 'origin/main'.
 실행 결과: 
 ```
 Readme 미리보기 및 Github 업로드시 이미지가 보이지 않음.
+```
+
+```
+원인 가설
+- 이미지 파일 경로 또는 파일명이 실제 파일과 일치하지 않음
+- Markdown 이미지 문법에 불필요한 백틱 포함
 ```
 
 실행 명령어: 미리보기로 이미지가 뜨는지 확인
@@ -1327,6 +1650,14 @@ code --reuse-window .\images\폴더구조.PNG
 
 ![프로젝트 폴더 구조](images/폴더구조.PNG)
 
+```
+해결 결과
+- 불필요한 백틱을 제거한 후 README 미리보기에서 이미지가 정상적으로 표시됨
+
+재발 방지
+- 이미지 파일명, 확장자, 상대 경로 및 Markdown 이미지 문법을 함께 확인
+```
+
 ## 12. 최종 검증 
 
 ### 12-1. Docker 컨테이너, 이미지, 볼륨 Git, Github업로드 검증
@@ -1367,6 +1698,15 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
+```
+추가설명
+명령어	          검증 목적
+docker ps -a	   생성된 컨테이너와 실행 상태 확인
+docker images	   생성된 Docker 이미지 확인
+docker volume ls  생성된 Docker 볼륨 확인
+git status	       로컬 저장소의 변경사항 및 원격 동기화 상태 확인
+```
+
 ### 12-2. 최종 변경사항 Github업로드
 
 실행 명령어: 변경사항 업로드
@@ -1381,7 +1721,6 @@ git push
 [main c1c68f8] Complete development workstation mission
  1 file changed, 6 insertions(+), 4 deletions(-)
 Enumerating objects: 5, done.
-Counting objects: 100% (5/5), done.
 Delta compression using up to 12 threads
 Compressing objects: 100% (3/3), done.
 Writing objects: 100% (3/3), 379 bytes | 379.00 KiB/s, done.
@@ -1389,4 +1728,18 @@ Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
 remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
 To https://github.com/ksdevl/my-first-Docker.git
    ebd94af..c1c68f8  main -> main
+PS C:\Users\K'\my-first-docker> git add .
+>> git commit -m "Complete development workstation mission"
+>> git push
+[main 003762c] Complete development workstation mission
+ 1 file changed, 62 insertions(+)
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 1.21 KiB | 1.21 MiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/ksdevl/my-first-Docker.git
+   c1c68f8..003762c  main -> main
 ```
