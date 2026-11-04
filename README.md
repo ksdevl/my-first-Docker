@@ -1163,7 +1163,7 @@ d-----      2026-11-04   오후 1:52                images
 
 ![프로젝트 폴더 구조](images/폴더구조.PNG)
 
-### 10-2. Readme에 스크린샷 연결
+### 10-2. Readme에 스크린샷 연결 및 증거자료
 
 1. Docker 실행<br>
 ![Docker Hello World](./images/Docker%20실행%20결과.PNG)
@@ -1178,9 +1178,9 @@ d-----      2026-11-04   오후 1:52                images
 ![Docker Volume Persistence Test](./images/데이터%20영속성.PNG)
 
 
-## Troubleshooting 
+## 11. Troubleshooting 
 
-### 1. Github에 업로드
+### 11-1. Github에 업로드
 
 실행 명령어: 
 ```
@@ -1274,7 +1274,7 @@ To https://github.com/ksdevl/my-first-Docker.git
 branch 'main' set up to track 'origin/main'.
 ```
 
-### 2. 최종 폴더 구조
+### 11-2. 최종 폴더 구조
 
 실행 명령어: 
 ```
@@ -1326,3 +1326,5 @@ code --reuse-window .\images\폴더구조.PNG
 실행 결과
 
 ![프로젝트 폴더 구조](images/폴더구조.PNG)
+
+
