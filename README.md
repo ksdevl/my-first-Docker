@@ -1135,7 +1135,7 @@ git push
 
 실행 결과
 ```
-![alt text](image.png)
+![폴더구조](images/폴더구조.png)
 ```
 
 
