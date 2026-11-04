@@ -929,10 +929,10 @@ source=$($PWD.Path)\app,target=/usr/share/nginx/html,readonly" nginx:latest
 
 실행 결과: 브라우저에서 수정 내용 반영 확인
 
-기존
+기존<br>
 ![Hello, Docker!](./images/웹%20서버%20컨테이너(8080)_최초.PNG)
 
-변경 후
+변경 후<br>
 ![Hello, Bind Mount!](./images/웹%20서버%20컨테이너(8080).PNG)
 
 
@@ -1165,14 +1165,17 @@ d-----      2026-11-04   오후 1:52                images
 
 ### 10-2. Readme에 스크린샷 연결
 
-1. Docker 실행
+1. Docker 실행<br>
 ![Docker Hello World](./images/Docker%20실행%20결과.PNG)
 
-2. 웹 서버 실행
+2. 웹 서버 실행<br>
+![Hello, Docker!](./images/웹%20서버%20컨테이너(8080)_최초.PNG)
+
+3. 바인드 마운트<br>
 ![Hello, Bind Mount!](./images/웹%20서버%20컨테이너(8080).PNG)
 
-
-
+4. 볼륨 데이터 영속성<br>
+![Docker Volume Persistence Test](./images/데이터%20영속성.PNG)
 
 
 ## Troubleshooting 
