@@ -1327,4 +1327,66 @@ code --reuse-window .\images\폴더구조.PNG
 
 ![프로젝트 폴더 구조](images/폴더구조.PNG)
 
+## 12. 최종 검증 
 
+### 12-1. Docker 컨테이너, 이미지, 볼륨 Git, Github업로드 검증
+
+실행 명령어: 
+```
+docker ps -a
+docker images
+docker volume ls
+git status
+```
+
+실행 결과: 
+```
+CONTAINER ID   IMAGE                COMMAND                   CREATED          STATUS                      PORTS                                     NAMES
+c20c56633869   hello-world          "/hello"                  20 minutes ago   Exited (0) 20 minutes ago                                             confident_kare
+d5cf778bfb56   nginx:latest         "/docker-entrypoint.…"   25 hours ago     Up 25 minutes               0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   mission-bind
+3bc392aa5abe   my-webserver:v1      "/docker-entrypoint.…"   25 hours ago     Exited (0) 25 hours ago                                               my-webserver-container
+b7b83abfca29   hello-world:latest   "/hello"                  27 hours ago     Exited (0) 27 hours ago                                               unruffled_kowalevski
+d03ce15efe5d   hello-world          "/hello"                  28 hours ago     Exited (0) 28 hours ago                                               upbeat_mestorf
+                                                                    i Info →   U  In Use
+IMAGE                ID             DISK USAGE   CONTENT SIZE   EXTRA
+alpine:latest        be2656061b53         13MB         3.94MB        
+hello-world:latest   c567b231f656       25.9kB         9.49kB    U   
+my-webserver:v1      114810bad594        241MB         63.9MB    U   
+nginx:latest         5ab5b0b01097        243MB         66.8MB    U   
+ubuntu:latest        6a06111c3b0a        163MB         45.9MB        
+DRIVER    VOLUME NAME
+local     mission-data
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+### 12-2. 최종 변경사항 Github업로드
+
+실행 명령어: 변경사항 업로드
+```
+git add .
+git commit -m "Complete development workstation mission"
+git push
+```
+
+실행 결과: 
+```
+[main c1c68f8] Complete development workstation mission
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 379 bytes | 379.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/ksdevl/my-first-Docker.git
+   ebd94af..c1c68f8  main -> main
+```
