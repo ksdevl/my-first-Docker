@@ -1016,3 +1016,215 @@ Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----                                     
 -a----      2026-11-04   오전 3:12              0 .gitignore  
 ```
+
+### 9-3. Git 저장소 초기화
+
+실행 명령어: 
+```
+New-Item .gitignore -ItemType File
+```
+
+실행 결과: 기존 프로젝트 폴더가 저장소로 지정되어 있어서, 다시 저장소로 지정함.
+```
+warning: re-init: ignored --initial-branch=main
+Reinitialized existing Git repository in C:/Users/K'/my-first-docker/.git/
+```
+
+실행 명령어: Git 상태 확인
+```
+git status
+```
+
+실행 결과
+```
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   README.md
+        new file:   logs/terminal.md
+        new file:   practice.txt
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .gitignore
+        Dockerfile
+        app/
+        docker/
+```
+
+### 9-4. 파일 등록 및 첫번째 커밋
+
+실행 명령어: 
+```
+git add .
+git status
+git commit -m "First workstation mission"
+```
+
+실행 결과
+```
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   .gitignore
+        new file:   Dockerfile
+        new file:   README.md
+        new file:   app/index.html
+        new file:   docker/Dockerfile
+        new file:   logs/terminal.md
+        new file:   practice.txt
+
+[main (root-commit) 8d1ce94] First workstation mission
+ 7 files changed, 1046 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 Dockerfile
+ create mode 100644 README.md
+ create mode 100644 app/index.html
+ create mode 100644 docker/Dockerfile
+ create mode 100644 logs/terminal.md
+ create mode 100644 practice.txt
+ ```
+
+### 9-5. Github 저장소 생성
+
+### 9-6. Github에 업로드
+
+실행 명령어: 
+```
+git remote add origin https://github.com/ksdevl/my-first-Docker.git
+git push -u origin main
+```
+
+실행 결과: 
+```
+numerating objects: 15, done.
+Counting objects: 100% (15/15), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (8/8), done.
+Writing objects: 100% (13/13), 8.72 KiB | 2.18 MiB/s, done.
+Total 13 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), done.
+To https://github.com/ksdevl/my-first-Docker.git
+   51a4285..898e245  main -> main
+branch 'main' set up to track 'origin/main'.
+```
+
+### 9-7. 수정사항 업로드
+
+실행 명령어: 
+```
+git add .
+git commit -m "Update mission documentation"
+git push
+```
+
+
+
+
+
+## Troubleshooting 
+
+### 1. Github에 업로드
+
+실행 명령어: 
+```
+git remote add origin https://github.com/ksdevl/my-first-Docker.git
+git push -u origin main
+```
+
+실행 결과: 기존 readme 저장소가 있어서 발생
+```
+error: remote origin already exists.
+To https://github.com/ksdevl/my-first-Docker
+ ! [rejected]        main -> main (fetch first)
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+```
+
+실행 명령어: 저장소를 다시 세팅
+```
+git remote set-url origin https://github.com/ksdevl/my-first-Docker.git
+```
+
+실행 명령어: 수정되었는지 확인
+```
+git remote -v
+```
+
+실행 결과: 
+```
+origin  https://github.com/ksdevl/my-first-Docker.git (fetch)
+origin  https://github.com/ksdevl/my-first-Docker.git (push)
+```
+
+실행 명령어: 원격 저장소의 변경사항을 가져오고, 별개로 시작한 저장소의 이력을 병합하도록 허용
+```
+git pull origin main --allow-unrelated-histories
+```
+
+실행 결과: 
+```
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (3/3), 880 bytes | 29.00 KiB/s, done.
+From https://github.com/ksdevl/my-first-Docker
+ * branch            main       -> FETCH_HEAD
+ * [new branch]      main       -> origin/main
+Auto-merging README.md
+CONFLICT (add/add): Merge conflict in README.md
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+실행 명령어: Readme를 로컬파일 기준으로 선택
+```
+git checkout --ours README.md
+```
+
+실행 결과: 
+```
+Updated 1 path from the index
+```
+
+실행 명령어: 충돌 해결 및 병합 커밋 생성
+```
+git add README.md
+git commit -m "Resolve merge conflict using local README"
+```
+
+실행 결과: 
+```
+[main 898e245] Resolve merge conflict using local README
+```
+
+실행 명령어: Github에 업로드
+```
+git push -u origin main
+```
+
+실행 결과: 
+```
+numerating objects: 15, done.
+Counting objects: 100% (15/15), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (8/8), done.
+Writing objects: 100% (13/13), 8.72 KiB | 2.18 MiB/s, done.
+Total 13 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), done.
+To https://github.com/ksdevl/my-first-Docker.git
+   51a4285..898e245  main -> main
+branch 'main' set up to track 'origin/main'.
+```
