@@ -269,6 +269,21 @@ d-----      2026-11-02   오후 2:55                screenshots
 -a----      2026-11-02   오후 3:30           6405 README.md 
 ```
 
+```
+디렉터리 구성 목적
+
+프로젝트 파일을 기능별로 구분하여 관리하고, 실습 과정에서 생성되는 소스 코드와 데이터 및 증거 자료를 쉽게 확인할 수 있도록 디렉터리를 구성하였음.
+
+디렉터리         용도 
+app/            웹 서버에서 제공할 HTML 파일 보관 
+docker/         Docker 관련 실습 파일 및 설정 파일 보관 
+docker-data/    Docker 데이터 관련 실습을 위한 디렉터리 
+practice/       파일 생성, 복사, 이동 등 기본 터미널 실습 파일 보관 
+logs/           터미널 및 Docker 명령어 실행 기록 보관 
+screenshots/    실습 과정 및 실행 결과 화면 캡처 보관 
+images/         README에 삽입할 이미지 및 실습 증거 자료 보관 
+```
+
 실행 명령어:
 ```
 Get-ChildItem -Force
@@ -644,7 +659,15 @@ Server:
   ::1/128
  Live Restore Enabled: false
  Firewall Backend: iptables
- ```
+ 
+Docker Client Version: 29.9.2
+Docker Server Version: 29.9.2
+Docker Context: desktop-linux
+Operating System: Docker Desktop
+OSType: linux
+Architecture: x86_64
+```
+
 
 ### 5-2. 첫 번째 컨테이너 실행
 
@@ -683,6 +706,17 @@ Share images, automate workflows, and more with a free Docker ID:
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
  ```
+
+```
+검증 내용
+
+- Docker Hub에서 hello-world 이미지를 다운로드
+- 다운로드한 이미지로 컨테이너를 생성하고 실행
+- Hello from Docker! 메시지 출력
+- 컨테이너 실행이 정상적으로 완료됨
+
+실행 명령과 결과는 README의 해당 항목 및 logs/의 원본 실행 기록에서 확인할 수 있음
+```
 
 ### 5-3. Ubuntu 컨테이너 실행
 
@@ -845,6 +879,13 @@ hello-world:latest   c567b231f656       25.9kB         9.49kB    U
 ubuntu:latest        6a06111c3b0a        163MB         45.9MB    U   
 ```
 
+```
+docker ps는 실행 중인 컨테이너를 확인하고, docker ps -a는 종료된 컨테이너를 포함한 전체 컨테이너를 확인한다.
+
+docker images는 현재 로컬에 저장된 이미지 목록을 확인한다.
+```
+
+
 ### 5-7. 컨테이너 로그 및 관리
 
 실행 명령어:
@@ -897,6 +938,16 @@ root@a39bc771f2c1:/# exit
 exit
 mission-ubuntu
 mission-ubuntu
+```
+
+```
+컨테이너 정리의 의미
+
+- docker stop: 실행 중인 컨테이너를 중지
+- docker rm: 컨테이너를 삭제
+- docker rmi: 사용하지 않는 이미지를 삭제
+
+컨테이너 삭제와 이미지 삭제는 서로 다른 작업이다. 컨테이너를 삭제하더라도 별도로 생성한 Docker Volume은 삭제하지 않는 한 유지된다.
 ```
 
 ### 5-8. attach와 exec 차이 확인
@@ -977,6 +1028,23 @@ stats-test
 
 - 이미지는 빌드하여 생성하고, 컨테이너는 이미지를 실행하여 생성한다.
 - 컨테이너 내부에서 변경한 내용은 기본적으로 해당 컨테이너의 쓰기 가능 계층에 저장되며, 컨테이너 삭제 시 함께 사라질 수 있음
+
+
+이미지에서 컨테이너가 실행되는 흐름
+
+Dockerfile 작성
+      v
+Docker 이미지 빌드
+      v
+컨테이너 생성 및 실행
+      v
+컨테이너 내부에서 프로그램 실행
+      v
+변경 데이터 저장
+      v
+Volume 또는 Bind Mount로 데이터 유지
+
+이미지는 컨테이너를 생성하기 위한 기반이고, 컨테이너는 이미지로 생성한 실행 환경이다. 컨테이너의 일반 쓰기 계층에 저장된 데이터는 컨테이너 삭제 시 사라질 수 있으므로 영속성이 필요한 데이터는 Volume이나 Bind Mount를 활용해야 한다.
 ```
 
 ## 6. Dockerfile 작성 및 커스텀 웹 서버 구축
@@ -1062,6 +1130,21 @@ EXPOSE 80
 - EXPOSE: 컨테이너가 서비스에 사용할 포트 80을 문서화 함
 ```
 
+```
+Dockerfile 위치 및 역할
+
+이번 실습에서 실제 이미지 빌드에 사용한 파일은 프로젝트 루트의 Dockerfile이다.
+
+my-first-docker/
+├── Dockerfile
+├── app/
+│   └── index.html
+└── docker/
+    └── Dockerfile
+
+docker/Dockerfile과 루트의 Dockerfile은 서로 다른 파일이다. 실제 빌드 명령은 -f .\Dockerfile을 사용하므로 루트의 Dockerfile을 참조한다.
+```
+
 ### 6-3. Docker image build
 
 실행 명령어:
@@ -1090,13 +1173,31 @@ docker build -t my-webserver:v1 -f .\Dockerfile .
  => => exporting manifest list sha256:f438ee662f7fba7224a9f70f386fe091d19d644e67fa  0.1s
  => => naming to docker.io/library/my-webserver:v1                                  0.0s
  => => unpacking to docker.io/library/my-webserver:v1         
- ```
+```
+```
+빌드 명령 분석
+
+docker build -t my-webserver:v1 -f .\Dockerfile .
+
+-t my-webserver:v1: 빌드한 이미지의 이름과 태그 지정
+-f .\Dockerfile: 사용할 Dockerfile의 경로 지정
+마지막 .: 빌드 컨텍스트를 현재 디렉터리로 지정
+
+빌드 오류가 발생하면 다음 순서로 확인한다.
+
+1. Docker Desktop과 Docker 데몬이 실행 중인지 확인한다.
+2. Dockerfile의 경로와 파일명을 확인한다.
+3. COPY 명령에 지정한 파일이 빌드 컨텍스트 안에 있는지 확인한다.
+4. 빌드 로그에서 실패한 단계와 오류 메시지를 확인한다.
+5. 캐시 문제를 의심할 경우 다음 명령으로 캐시를 사용하지 않고 다시 빌드한다.
+
+docker build --no-cache -t my-webserver:v1 -f .\Dockerfile .
+```
 
 ```
 추가설명
-기존 베이스 이미지: nginx:latest
-
-커스텀 이미지: my-webserver:v1
+- 기존 베이스 이미지: nginx:latest
+- 커스텀 이미지: my-webserver:v1
 
 기존 NGINX 이미지에 직접 작성한 index.html을 추가하여 커스텀 이미지를 제작하였음.
 ```
@@ -1116,11 +1217,40 @@ Hello, Docker!
 Mission을 위한 첫단계!
 ```
 
+```
+포트 매핑 및 네트워크 원리
+
+docker run -d -p 8080:80 --name my-webserver-container my-webserver:v1
+
+- 호스트 포트: 8080
+- 컨테이너 포트: 80
+- 웹 서버: NGINX
+
+Docker 컨테이너는 네트워크 네임스페이스를 통해 호스트와 분리된 네트워크 환경을 갖는다.
+
+-p 8080:80은 호스트의 8080번 포트로 들어온 요청을 컨테이너의 80번 포트로 전달하도록 설정한다.
+
+
+통신 흐름
+
+사용자 브라우저
+      v
+localhost:8080
+      v
+Docker 포트포워딩
+      v
+컨테이너 네트워크
+      v
+NGINX :80
+
+EXPOSE 80은 컨테이너가 사용하는 포트를 문서화하는 설정이며, 실제 호스트 포트 공개는 -p 옵션으로 수행한다.
+```
+
 ### 6-5. 웹 서버 컨테이너 검증
 
 실행 명령어:
 ```
-curl.exe http://localhost:8080
+curl.exe -i http://localhost:8080
 ```
 
 실행 결과
@@ -1265,8 +1395,21 @@ Docker Volume Persistence Test
 ```
 
 ```
+볼륨 상세 정보 확인
+
+docker volume inspect mission-data
+
+확인 항목:
+- Name: mission-data
+- Driver: local
+- Mountpoint: Docker가 관리하는 볼륨 저장 위치
+
+Docker Volume은 Docker 엔진이 관리하는 저장 공간이다. Docker Desktop의 Linux 컨테이너에서는 저장 위치가 내부 Linux 실행 환경에 있으므로 Windows의 일반 폴더와 동일하게 취급하지 않는다.
+```
+
+```
 추가설명
-- Docker Volume은 컨테이너를 독립적으로 데이터를 보존할 수 있는 저장 공간임. 컨테이너 내부의 일반 파일시스템에 데이터를 저장하면 컨테이너 삭제 시 데이터도 사라질 수 있지만, Docker Volume을 연결하면 데이터가 컨테이너 외부의 Docker 관리 저장 공간에 보존되므로 컨테이너를 삭제하더라도 새로운 컨테이너에서 기존 데이터를 다시 사용할 수 있음.
+- Docker Volume은 컨테이너를 독립적으로 데이터를 보존할 수 있는 저장 공간이다. 컨테이너 내부의 일반 파일시스템에 데이터를 저장하면 컨테이너 삭제 시 데이터도 사라질 수 있지만, Docker Volume을 연결하면 데이터가 컨테이너 외부의 Docker 관리 저장 공간에 보존되므로 컨테이너를 삭제하더라도 새로운 컨테이너에서 기존 데이터를 다시 사용할 수 있다.
 
 구분	               바인드 마운트	            Docker Volume
 저장 위치	       호스트에서 지정한 경로   	Docker가 관리하는 저장 공간
@@ -1274,6 +1417,99 @@ Docker Volume Persistence Test
 호스트 경로 지정	   필요	                    불필요
 데이터 유지	       호스트 파일 유지	        컨테이너 삭제 후에도 유지
 대표 활용	       웹 개발 및 파일 변경 반영	DB 및 서비스 데이터 보존
+```
+
+### 8-5. Docker Volume 백업 및 복원
+
+실행 명령어: 백업 폴더 생성
+```
+mkdir -p ~/mission-backups
+```
+
+실행 결과
+```
+Mode                 LastWriteTime         Length Name                                       
+----                 -------------         ------ ----                                       
+d-----      2026-11-05   오후 4:32                mission-backups 
+```
+
+실행 명령어: 백업 파일 생성
+```
+$backup_file = "mission-data-$(Get-Date -Format 'yyyyMMdd-HHmmss').tar.gz"
+Write-Host $backup_file
+```
+
+실행 결과
+```
+mission-data-20261105-163545.tar.gz
+```
+
+실행 명령어: 
+```
+docker run --rm `
+  --mount type=volume,source=mission-data,target=/data,readonly `
+  --mount "type=bind,source=$HOME/mission-backups,target=/backup" `
+  alpine `
+  sh -c "tar -czf /backup/$backup_file -C /data ."
+```
+
+실행 명령어: 백업 파일 확인
+```
+Get-ChildItem "$HOME/mission-backups/$backup_file" |
+Format-List Name, Length, LastWriteTime
+```
+
+실행 결과
+```
+Name          : mission-data-20261105-163545.tar.gz
+Length        : 163
+LastWriteTime : 2026-11-05 오후 4:37:38
+```
+
+실행 명령어: 별도의 Volume에 복원
+```
+$restore_volume = "mission-data-restore-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+docker volume create $restore_volume
+```
+
+실행 결과
+```
+mission-data-restore-20261105-164427
+```
+
+실행 명령어: 백업 파일을 복원용 볼륨에 압축 해제
+```
+docker run --rm `
+  --mount "type=volume,source=$restore_volume,target=/data" `
+  --mount "type=bind,source=$HOME/mission-backups,target=/backup,readonly" `
+  alpine `
+  sh -c "tar -xzf /backup/$backup_file -C /data"
+```
+
+실행 명령어: 복원 결과 확인
+```
+docker run --rm `
+  --mount "type=volume,source=$restore_volume,target=/data,readonly" `
+  alpine `
+  ls -l /data
+```
+
+실행 결과
+```
+-rw-r--r--    1 root     root            31 Nov  3 18:03 test.txt
+```
+
+```
+백업 운영 계획
+
+- 데이터 변경 작업이 있는 날에는 작업 종료 후 백업한다.
+- Volume 삭제, 초기화, 대규모 변경 전에는 추가 백업한다.
+- 최근 7개 일일 백업을 보관한다.
+- 백업 파일은 외장 저장장치나 별도의 안전한 저장소에도 복사한다.
+- 복원 테스트를 주기적으로 수행한다.
+- 백업 파일은 공개 GitHub 저장소에 올리지 않는다.
+
+Docker Volume의 데이터 영속성과 백업은 서로 다른 개념이다. Volume은 컨테이너 삭제 후 데이터 유지를 위한 기능이고, 백업은 Volume 자체의 손상이나 삭제에 대비하기 위한 별도의 보호 방법이다.
 ```
 
 ## 9. Git 및 Github 연동
@@ -1407,7 +1643,7 @@ Changes to be committed:
 
 ### 9-6. Github에 업로드
 
-실행 명령어: 
+실행 명령어: Github 원격 저장소 연결 및 업로드
 ```
 git remote add origin https://github.com/ksdevl/my-first-Docker.git
 git push -u origin main
@@ -1425,6 +1661,25 @@ remote: Resolving deltas: 100% (1/1), done.
 To https://github.com/ksdevl/my-first-Docker.git
    51a4285..898e245  main -> main
 branch 'main' set up to track 'origin/main'.
+```
+
+실행 명령어: 원격 저장소와 커밋 확인
+```
+git log -1 --oneline
+git rev-parse HEAD
+git ls-remote origin refs/heads/main
+```
+
+실행 결과: 
+```
+d655044 (HEAD -> main, origin/main) Update mission documentation
+d6550442dd6b5d1508e4d2b5c8f5b87d9c314af9
+d6550442dd6b5d1508e4d2b5c8f5b87d9c314af9        refs/heads/main
+```
+```
+git log -1 --oneline: 가장 최근 커밋의 짧은 해시와 메시지 확인
+git rev-parse HEAD: 현재 로컬 커밋의 전체 해시 확인
+git ls-remote origin refs/heads/main: GitHub 원격 main 브랜치의 커밋 해시 확인
 ```
 
 ### 9-7. 수정사항 업로드
@@ -1496,6 +1751,7 @@ Docker 실행 증거   images/
 바인드 마운트 증거	  images/
 볼륨 영속성 증거	  images/
 프로젝트 구조       images/
+Git 및 VSCode 연동 증거 images/ 또는 screenshots/
 ```
 
 ### 10-4. 체크리스트
@@ -1699,6 +1955,17 @@ docker images
 docker volume ls
 git status
 ```
+```
+검증 항목별 목적
+
+docker ps -a: 컨테이너 생성 여부와 실행·종료 상태 확인
+docker images: 이미지 생성 및 저장 여부 확인
+docker volume ls: Docker Volume 생성 여부 확인
+docker volume inspect mission-data: Volume의 드라이버와 상세 정보 확인
+git status: 로컬 저장소 변경 사항 확인
+git log -1 --oneline: 최근 커밋 확인
+```
+
 
 실행 결과: 
 ```
@@ -1773,4 +2040,17 @@ Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
 remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
 To https://github.com/ksdevl/my-first-Docker.git
    c1c68f8..003762c  main -> main
+```
+
+실행 명령어: 최종 동기화 상태 확인
+```
+git add .
+git commit -m "Complete development workstation mission"
+git push
+```
+
+실행 결과: 두 명령의 커밋 해시가 일치하면 동기화 완료 
+```
+d6550442dd6b5d1508e4d2b5c8f5b87d9c314af9
+d6550442dd6b5d1508e4d2b5c8f5b87d9c314af9        refs/heads/main
 ```
