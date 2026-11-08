@@ -1273,6 +1273,29 @@ curl.exe -i http://localhost:8080
 
 ### 7-1. 기존 컨테이너 중지 및 삭제
 
+실행 명령어: Docker 컨테이너 중 호스트 포트 8080을 사용하는 컨테이너가 있는지 확인
+```
+docker ps --filter "publish=8080"
+docker ps -a
+```
+
+실행 결과
+```
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+CONTAINER ID   IMAGE                COMMAND                   CREATED      STATUS                        PORTS                  NAMES
+c20c56633869   hello-world          "/hello"                  3 days ago   Exited (0) 3 days ago                                confident_kare
+d5cf778bfb56   nginx:latest         "/docker-entrypoint.…"   4 days ago   Exited (255) 55 minutes ago   0.0.0.0:8080->80/tcp   mission-bind
+3bc392aa5abe   114810bad594         "/docker-entrypoint.…"   4 days ago   Exited (0) 4 days ago                                my-webserver-container
+b7b83abfca29   hello-world:latest   "/hello"                  5 days ago   Exited (0) 5 days ago                                unruffled_kowalevski
+d03ce15efe5d   hello-world          "/hello"                  5 days ago   Exited (0) 5 days ago                                upbeat_mestorf
+```
+
+실행 명령어: Windows 시스템 포트 점유 프로세스 확인
+```
+netstat -ano | findstr :8080
+```
+
+
 실행 명령어: 실행중인 경우 같은 포트를 사용할 수 없음.
 ```
 docker stop mission-bind
@@ -1283,6 +1306,33 @@ docker rm mission-bind
 ```
 mission-bind
 ```
+
+실행 명령어: Windows 프로그램이 점유하고 있는 경우에는 프로그램을 정상 종료한다. 불가피하게 프로세스를 종료해야 한다면 PID와 프로그램의 용도를 확인하고 종료해도 안전한 경우에만 실행한다.
+```
+Stop-Process -Id [PID]
+```
+
+실행 명령어: 포트 해제 여부 재확인
+```
+netstat -ano | findstr :8080
+docker ps --filter "publish=8080"
+```
+
+실행 결과
+```
+포트의 LISTENING 상태와 Docker 컨테이너의 포트 점유 여부를 다시 확인한다.
+```
+
+실행 명령어: 기존 8080포트를 사용할 수 없는 경우 호스트 포트를 8081로 변경하여 실행
+```
+docker run -d --name my-webserver-container -p 8081:80 my-webserver:v1
+```
+
+실행 명령어: 웹 서버 접속 확인
+```
+curl.exe http://localhost:8081
+```
+
 
 ### 7-2. 바인드 마운트로 컨테이너 실행
 
