@@ -1946,7 +1946,188 @@ code --reuse-window .\images\폴더구조.PNG
 
 ## 12. 최종 검증 
 
-### 12-1. Docker 컨테이너, 이미지, 볼륨 Git, Github업로드 검증
+### 12-1. 보안 및 개인정보 보호(Git)
+
+```
+현재 저장소는 공개 GitHub 저장소이므로 다음 5가지를 중심으로 검증 진행
+1. GitHub에 개인 이메일 및 개인정보가 노출되었는지 확인
+2. 비밀번호, 토큰, API 키, 개인키 등 인증정보 노출 여부 확인
+3. README와 스크린샷에 개인정보가 포함되었는지 확인
+4. Git 커밋 이력에 민감정보가 남아 있는지 확인
+5. GitHub 저장소의 공개 범위와 접근 권한 확인
+```
+실행 명령어: Git 사용자 정보 및 이메일 확인
+```
+git config user.name
+git config user.email
+
+git config --global user.name
+git config --global user.email
+```
+
+실행 결과: 개인 정보 노출 확인
+
+실행 명령어: Git 사용자 정보 일괄 마스킹
+```
+Write-Host "===== Git 사용자 정보 (마스킹 처리) ====="
+
+Write-Host "Local user.name : ********"
+Write-Host "Local user.email: ********"
+
+Write-Host "Global user.name : ********"
+Write-Host "Global user.email: ********"
+
+Write-Host "===== Git 설정 확인 완료 ====="
+```
+
+실행 결과: 
+```
+===== Git 사용자 정보 (마스킹 처리) =====
+Local user.name : ********
+Local user.email: ********
+Global user.name : ********
+Global user.email: ********
+===== Git 설정 확인 완료 =====
+```
+
+실행 명령어: 현재 커밋에 기록된 이메일 확인
+```
+git log -5 --format="%h %an <%ae>"
+```
+
+실행 결과: 
+```
+개인 이메일 노출
+```
+
+실행 명령어: 개인정보 노출 없이 커밋 이력 확인
+```
+git log -5 --format="%h ******** <********>"
+```
+
+실행 결과: 개인 이메일 블라인드 처리
+```
+50989a4 ******** <********>
+d655044 ******** <********>
+3bdff2f ******** <********>
+003762c ******** <********>
+c1c68f8 ******** <********>
+```
+
+```
+이메일 주소 공개 방지
+
+개인 이메일 주소를 공개하고 싶지 않다면 GitHub의 비공개 이메일 주소를 사용할 수 있다.
+1. GitHub 접속
+2. 우측 상단 프로필 → Settings
+3. Emails 메뉴 선택
+4. Keep my email addresses private 활성화
+5. 표시되는 GitHub noreply 이메일 주소 확인
+```
+
+실행 명령어: 상단의 절차 진행 후 입력
+```
+git config --global user.email "본인의_GitHub_noreply_이메일"
+```
+
+실행 결과: 
+```
+추후 생성 커밋에 적용
+```
+
+### 12-2. 보안 및 개인정보 보호(민감정보)
+
+```
+README, Dockerfile, 설정 파일 등에 다음의 정보가 들어 있는지 확인
+
+비밀번호:	GitHub, Docker, Windows 비밀번호
+인증 토큰:	GitHub Personal Access Token, API Token
+개인키:	SSH Private Key, 인증서 개인키
+API 키:	외부 서비스 API 인증키
+개인정보:	이메일, 전화번호, 개인 계정 정보
+인증정보:	인증 코드, 접속 문자열, 계정 비밀번호
+```
+
+실행 명령어: 현재 프로젝트 파일 확인
+```
+Get-ChildItem -Force
+```
+
+실행 결과: 
+```
+Mode                 LastWriteTime         Length Name                                  
+----                 -------------         ------ ----                                  
+d--h--      2026-11-05   오후 5:00                .git                                  
+d-----      2026-11-03   오후 3:36                app                                   
+d-----      2026-11-03   오후 3:32                dev-workstation-mission               
+d-----      2026-11-05   오전 3:09                docker                                
+d-----      2026-11-02   오후 2:55                docker-data                           
+d-----      2026-11-05   오전 3:34                images                                
+d-----      2026-11-02   오후 3:33                logs                                  
+d-----      2026-11-05   오전 2:52                permission-test                       
+d-----      2026-11-02   오후 2:55                screenshots                           
+d-----      2026-11-02   오후 3:46                test-folder                           
+-a----      2026-11-04   오후 1:02             96 .gitignore                            
+-a----      2026-11-03   오후 3:48             86 Dockerfile                            
+-a----      2026-11-04   오후 1:46          11690 image.png                             
+-a----      2026-11-02   오후 3:55             18 practice.txt                          
+-a----      2026-11-05   오후 5:13          62217 README.md       
+```
+
+실행 명령어: Git 관리 파일 목록 확인
+```
+git ls-files
+```
+
+실행 결과: 
+```
+.gitignore
+Dockerfile
+README.md
+app/index.html
+image.png
+"images/Docker \354\213\244\355\226\211 \352\262\260\352\263\274.PNG"
+images/source control.PNG
+"images/\352\271\203\355\227\210\353\270\214\354\231\200 vscode \354\227\260\353\217\231.PNG"
+"images/\353\215\260\354\235\264\355\204\260 \354\230\201\354\206\215\354\204\261.PNG"
+"images/\354\233\271 \354\204\234\353\262\204 \354\273\250\355\205\214\354\235\264\353\204\210(8080).PNG"
+"images/\354\233\271 \354\204\234\353\262\204 \354\273\250\355\205\214\354\235\264\353\204\210(8080)_\354\265\234\354\264\210.PNG"
+"images/\355\217\264\353\215\224\352\265\254\354\241\260.PNG"
+logs/terminal.md
+practice.txt
+```
+
+실행 명령어: 민감정보 검색
+```
+$patterns = 'password|passwd|secret|token|api[_-]?key|private[_-]?key|BEGIN OPENSSH PRIVATE KEY|BEGIN RSA PRIVATE KEY'
+
+Get-ChildItem -Recurse -File -Force |
+Where-Object {
+    $_.FullName -notmatch '\\.git\\' -and
+    $_.Extension -in '.md','.txt','.yml','.yaml','.json','.env','.ps1','.sh','.conf'
+} |
+Select-String -Pattern $patterns |
+Select-Object Path, LineNumber
+```
+
+실행 결과: 
+```
+Path                                  LineNumber
+----                                  ----------
+C:\Users\K'\my-first-docker\README.md        170
+C:\Users\K'\my-first-docker\README.md        598
+```
+
+```
+GitHub 저장소에서 확인
+
+1. 저장소 접속
+2. Security 탭 선택
+3. Secret scanning 항목 확인
+4. 노출된 인증정보 경고가 있는지 확인
+```
+
+### 12-3. Docker 컨테이너, 이미지, 볼륨 Git, Github업로드 검증
 
 실행 명령어: 
 ```
@@ -2005,7 +2186,7 @@ docker volume ls  생성된 Docker 볼륨 확인
 git status	      로컬 저장소의 변경사항 및 원격 동기화 상태 확인
 ```
 
-### 12-2. 최종 변경사항 Github업로드
+### 12-4. 최종 변경사항 Github업로드
 
 실행 명령어: 변경사항 업로드
 ```
