@@ -2225,13 +2225,20 @@ To https://github.com/ksdevl/my-first-Docker.git
 
 실행 명령어: 최종 동기화 상태 확인
 ```
-git add .
-git commit -m "Complete development workstation mission"
-git push
+git rev-parse HEAD
+git ls-remote origin refs/heads/main
 ```
 
 실행 결과: 두 명령의 커밋 해시가 일치하면 동기화 완료 
 ```
 d6550442dd6b5d1508e4d2b5c8f5b87d9c314af9
 d6550442dd6b5d1508e4d2b5c8f5b87d9c314af9        refs/heads/main
+```
+
+```
+최종 검증
+
+- 로컬 HEAD 커밋과 원격 main 브랜치의 커밋 해시가 일치해야 한다.
+- git status에서 작업 트리가 깨끗한 상태인지 확인한다.
+- GitHub 웹사이트에서 README 및 프로젝트 파일의 최신 수정 내용이 반영되었는지 확인한다.
 ```
